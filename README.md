@@ -23,8 +23,8 @@ Then run
     python setup.py install
 
 to compile and install the module `acor` in your Python path. The only dependency
-is [NumPy](http://numpy.scipy.org/) (including the `python-numpy-dev` package
-which you might have to install separately on some systems).
+is [NumPy](http://numpy.scipy.org/) (including the `python-dev` and `python-numpy-dev`
+packages which you might have to install separately on some systems).
 
 ##Usage
 
