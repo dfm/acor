@@ -6,7 +6,8 @@ This is a direct port of a C++ routine by
 estimates the autocorrelation time of time series data very quickly.
 
 [Dan Foreman-Mackey](http://danfm.ca) (NYU) made a few surface changes to the
-interface in order to write a Python wrapper.
+interface in order to write a Python wrapper (with the permission of the original
+author).
 
 ##Installation
 
