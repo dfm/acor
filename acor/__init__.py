@@ -1,2 +1,2 @@
-from _acor import acor
+from acor import *
 

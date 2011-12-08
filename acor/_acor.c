@@ -12,10 +12,17 @@ static char acor_doc[] =
 "----------\n"\
 "data : numpy.ndarray (N,) or (M, N)\n"\
 "    The time series.\n\n"\
+"maxlag : int\n"\
+"    N must be greater than maxlag times the estimated autocorrelation\n"\
+"    time.\n\n"\
 "Returns\n"\
 "-------\n"\
 "tau : numpy.ndarray (1,) or (M,)\n"\
-"    An estimate of the autocorrelation times.\n\n";
+"    An estimate of the autocorrelation time(s).\n\n"\
+"mean : numpy.ndarray (1,) or (M,)\n"\
+"    The sample mean(s) of data.\n\n"\
+"sigma : numpy.ndarray (1,) or (M,)\n"\
+"    An estimate of the standard deviation(s) of the sample mean(s).\n\n";
 
 PyMODINIT_FUNC init_acor(void);
 static PyObject *acor_acor(PyObject *self, PyObject *args);
@@ -36,17 +43,18 @@ PyMODINIT_FUNC init_acor(void)
 
 static PyObject *acor_acor(PyObject *self, PyObject *args)
 {
-    int i, N, ndim, info;
+    int i, N, ndim, info, maxlag;
     double *data;
-    double *taus = NULL, mean, sigma;
 
     /* Return value */
-    PyObject *acor_time = NULL;
+    PyObject *ret;
+    PyObject *tau_vec = NULL, *mean_vec = NULL, *sigma_vec = NULL;
     npy_intp M[1];
+    double *tau, *mean, *sigma;
 
     /* Parse the input tuple */
     PyObject *data_obj;
-    if (!PyArg_ParseTuple(args, "O", &data_obj))
+    if (!PyArg_ParseTuple(args, "Oi", &data_obj, &maxlag))
         return NULL;
 
     /* Get the data as a numpy array object */
@@ -77,21 +85,36 @@ static PyObject *acor_acor(PyObject *self, PyObject *args)
         M[0] = (int)PyArray_DIM(data_array, 0);
 
     /* allocate memory for the output */
-    acor_time = PyArray_SimpleNew(1, M, PyArray_DOUBLE);
-    if (acor_time == NULL) {
-        PyErr_SetString(PyExc_RuntimeError, "Couldn't allocate memory for output in acor.");
+    tau_vec   = PyArray_SimpleNew(1, M, PyArray_DOUBLE);
+    mean_vec  = PyArray_SimpleNew(1, M, PyArray_DOUBLE);
+    sigma_vec = PyArray_SimpleNew(1, M, PyArray_DOUBLE);
+    if (tau_vec == NULL || mean_vec == NULL || sigma_vec == NULL) {
+        PyErr_SetString(PyExc_RuntimeError, "Couldn't allocate memory for output.");
+        Py_XDECREF(tau_vec);
+        Py_XDECREF(mean_vec);
+        Py_XDECREF(sigma_vec);
         Py_DECREF(data_array);
         return NULL;
     }
 
-    /* Get a pointer to the output data */
-    taus = (double*)PyArray_DATA(acor_time);
+    /* Get a pointers to the output data */
+    tau   = (double*)PyArray_DATA(tau_vec);
+    mean  = (double*)PyArray_DATA(mean_vec);
+    sigma = (double*)PyArray_DATA(sigma_vec);
 
     for (i = 0; i < M[0]; i++) {
-        info = acor(&mean, &sigma, &(taus[i]), &(data[i*N]), N);
+        info = acor(&(mean[i]), &(sigma[i]), &(tau[i]), &(data[i*N]), N, maxlag);
         if (info != 0) {
-            PyErr_Format(PyExc_RuntimeError, "The autocorrelation time is too long "\
-                                             "relative to the variance in dimension %d.", i+1);
+            if (info == 1)
+                PyErr_Format(PyExc_RuntimeError, "The autocorrelation time is too "\
+                        "long relative to the variance in dimension %d.", i+1);
+            else
+                PyErr_SetString(PyExc_RuntimeError, "Couldn't allocate memory for "\
+                        "autocovariance vector.");
+
+            Py_DECREF(tau_vec);
+            Py_DECREF(mean_vec);
+            Py_DECREF(sigma_vec);
             Py_DECREF(data_array);
             return NULL;
         }
@@ -99,7 +122,20 @@ static PyObject *acor_acor(PyObject *self, PyObject *args)
 
     /* clean up */
     Py_DECREF(data_array);
-    return acor_time;
+
+    /* Build the output tuple */
+    ret = Py_BuildValue("NNN", tau_vec, mean_vec, sigma_vec);
+    if (ret == NULL) {
+        PyErr_SetString(PyExc_RuntimeError, "Couldn't build output tuple.");
+
+        Py_DECREF(tau_vec);
+        Py_DECREF(mean_vec);
+        Py_DECREF(sigma_vec);
+        Py_DECREF(data_array);
+        return NULL;
+    }
+
+    return ret;
 }
 
 

@@ -5,5 +5,5 @@
  * Ported for use in Python with permission from the original author.
  */
 
-int acor(double *mean, double *sigma, double *tau, double X[], int L);
+int acor(double *mean, double *sigma, double *tau, double X[], int L, int maxlag);
 
