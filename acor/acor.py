@@ -1,8 +1,3 @@
-"""
-A module to estimate the autocorrelation time of time-series data extremely quickly
-
-"""
-
 __all__ = ['acor']
 
 import numpy as np

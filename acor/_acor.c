@@ -1,3 +1,7 @@
+/*
+ * Written by: Dan Foreman-Mackey - danfm@nyu.edu
+ */
+
 #include <Python.h>
 #include <numpy/arrayobject.h>
 

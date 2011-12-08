@@ -6,7 +6,7 @@ from distutils.extension import Extension
 import numpy.distutils.misc_util
 
 setup(name='acor',
-        version='0',
+        version='1',
         description='Estimate your autocorrelation times very quickly.',
         author='Daniel Foreman-Mackey',
         author_email='danfm@nyu.edu',

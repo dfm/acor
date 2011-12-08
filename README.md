@@ -11,13 +11,20 @@ author).
 
 ##Installation
 
-Just run
+To obtain the software, download the source code and documentation [as a
+tarball](https://github.com/dfm/acor/tarball/master) or clone the git
+repository from [GitHub](https://github.com/dfm/acor):
 
+    git clone https://github.com/dfm/acor.git
+
+Then run
+
+    cd acor
     python setup.py install
 
 to compile and install the module `acor` in your Python path. The only dependency
-is [NumPy](http://numpy.scipy.org/) (including the `dev` package which you might
-have to install separately on some systems).
+is [NumPy](http://numpy.scipy.org/) (including the `python-numpy-dev` package
+which you might have to install separately on some systems).
 
 ##Usage
 
