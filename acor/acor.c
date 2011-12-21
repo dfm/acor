@@ -55,7 +55,11 @@ int acor(double *mean, double *sigma, double *tau, double X[], int L, int maxlag
         D += 2*C[s];
 
     /* Calculate the standard error, if D were the complete sum. */
-    *sigma = sqrt( fabs(D) / L );
+    /* FIXME: why is D sometimes negative?? */
+    if ( D < 0 ) {
+        return 2;
+    }
+    *sigma = sqrt( D / L );
     /* A provisional estimate, since D is only part of the complete sum. */
     *tau   = D / C[0];
 

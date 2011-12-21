@@ -19,14 +19,14 @@ def acor(data, maxlag=10):
 
     Returns
     -------
-    tau : numpy.ndarray (1,) or (M,)
-        An estimate of the autocorrelation time(s).
+    tau : float
+        An estimate of the autocorrelation time.
 
-    mean : numpy.ndarray (1,) or (M,)
-        The sample mean(s) of data.
+    mean : float
+        The sample mean of data.
 
-    sigma : numpy.ndarray (1,) or (M,)
-        An estimate of the standard deviation(s) of the sample mean(s).
+    sigma : float
+        An estimate of the standard deviation of the sample mean.
 
     """
     return _acor.acor(np.array(data), maxlag)
