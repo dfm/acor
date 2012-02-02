@@ -31,8 +31,8 @@ Usage
 Given some time series ``x``, you can estimate the autocorrelation time
 (``tau``) using::
 
-import acor
-tau, mean, sigma = acor.acor(x)
+    import acor
+    tau, mean, sigma = acor.acor(x)
 
 References
 ----------
