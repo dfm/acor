@@ -14,6 +14,7 @@ Installation
 ------------
 
 Just run ::
+
     pip install acor
 
 with ``sudo`` if you really need it.
@@ -21,9 +22,11 @@ with ``sudo`` if you really need it.
 Otherwise, download the source code
 `as a tarball <https://github.com/dfm/acor/tarball/master>`_
 or clone the git repository from `GitHub <https://github.com/dfm/acor>`_: ::
+
     git clone https://github.com/dfm/acor.git
 
 Then run ::
+
     cd acor
     python setup.py install
 
@@ -37,6 +40,7 @@ Usage
 
 Given some time series ``x``, you can estimate the autocorrelation time
 (``tau``) using: ::
+
     import acor
     tau, mean, sigma = acor.acor(x)
 
