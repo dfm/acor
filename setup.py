@@ -1,11 +1,25 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-from setuptools import setup, Extension
+import sys
+import os
+
+try:
+    from setuptools import setup, Extension
+    setup, Extension
+except ImportError:
+    from distutils.core import setup, Extension
+    setup, Extension
+
 import numpy.distutils.misc_util
 
 
-desc = open("README.md").read()
+if sys.argv[-1] == "publish":
+    os.system("python setup.py sdist upload")
+    sys.exit()
+
+
+desc = open("README.rst").read()
 with open("requirements.txt") as f:
     required = f.readlines()
 
