@@ -1,8 +1,9 @@
-__all__ = ['acor']
+__all__ = ["acor", "function"]
 
 import numpy as np
 
 import _acor
+
 
 def acor(data, maxlag=10):
     """
@@ -31,3 +32,27 @@ def acor(data, maxlag=10):
     """
     return _acor.acor(np.array(data), maxlag)
 
+
+def function(data):
+    """
+    Calculate the autocorrelation function for a 1D time series.
+
+    Parameters
+    ----------
+    data : numpy.ndarray (N,)
+        The time series.
+
+    Returns
+    -------
+    rho : numpy.ndarray (N,)
+        An autocorrelation function.
+
+    """
+    N = len(data)
+    mu = np.mean(data)
+    result = np.zeros_like(data)
+
+    for t in xrange(N):
+        result[t] = np.mean((data[:N - t] - mu) * (data[t:] - mu))
+
+    return result / result[0]
