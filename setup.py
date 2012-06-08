@@ -20,13 +20,12 @@ if sys.argv[-1] == "publish":
 
 
 desc = open("README.rst").read()
-with open("requirements.txt") as f:
-    required = f.readlines()
+required = ["numpy"]
 
 
 setup(
     name="acor",
-    version="1.0.1",
+    version="1.0.2",
     author="Daniel Foreman-Mackey and Jonathan Goodman",
     author_email="danfm@nyu.edu",
     packages=["acor"],
