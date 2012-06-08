@@ -10,6 +10,7 @@
 /* Docstrings */
 static char doc[] = "A module to estimate the autocorrelation time of time-series "\
                     "data extremely quickly.\n";
+
 static char acor_doc[] =
 "Estimate the autocorrelation time of a time series\n\n"\
 "Parameters\n"\
@@ -32,11 +33,18 @@ static char acor_doc[] =
 "This is a _destructive_ operation! The first time series in data will be\n"\
 "overwritten by the mean time series.\n\n";
 
+static char function_doc[] =
+"Calculate the autocorrelation function of a time series\n\n";
+
+
 PyMODINIT_FUNC init_acor(void);
+
 static PyObject *acor_acor(PyObject *self, PyObject *args);
+static PyObject *acor_function(PyObject *self, PyObject *args);
 
 static PyMethodDef module_methods[] = {
     {"acor", acor_acor, METH_VARARGS, acor_doc},
+    {"function", acor_function, METH_VARARGS, function_doc},
     {NULL, NULL, 0, NULL}
 };
 
@@ -138,3 +146,58 @@ static PyObject *acor_acor(PyObject *self, PyObject *args)
     return ret;
 }
 
+
+static PyObject *acor_function(PyObject *self, PyObject *args)
+{
+    int ndim1, ndim2, N1, N2;
+    double *data, *out_data;
+    double mean;
+
+    /* Parse the input tuple */
+    PyObject *data_obj, *out_obj;
+    if (!PyArg_ParseTuple(args, "OO", &data_obj, &out_obj))
+        return NULL;
+
+    /* Get the data as a numpy array object */
+    PyObject *data_array = PyArray_FROM_OTF(data_obj, NPY_DOUBLE, NPY_IN_ARRAY);
+    PyObject *out_array = PyArray_FROM_OTF(out_obj, NPY_DOUBLE, NPY_OUT_ARRAY);
+    if (data_array == NULL || out_array == NULL) {
+        PyErr_SetString(PyExc_TypeError, "The input data must be a numpy.ndarrays.");
+        Py_XDECREF(data_array);
+        Py_XDECREF(out_array);
+        return NULL;
+    }
+
+    /* Check the number of dimensions in the input data (must be 1 or 2 only) */
+    ndim1 = (int)PyArray_NDIM(data_array);
+    ndim2 = (int)PyArray_NDIM(out_array);
+    if (ndim1 != 1 || ndim1 != ndim2) {
+        PyErr_SetString(PyExc_TypeError, "The input data must be a 1D numpy.ndarray.");
+        Py_DECREF(data_array);
+        Py_DECREF(out_array);
+        return NULL;
+    }
+
+    /* Get a pointer to the input data */
+    data = (double*)PyArray_DATA(data_array);
+    out_data = (double*)PyArray_DATA(out_array);
+
+    /* N gives the length of the time series */
+    N1 = (int)PyArray_DIM(data_array, ndim1 - 1);
+    N2 = (int)PyArray_DIM(out_array, ndim2 - 1);
+    if (N1 != N2) {
+        PyErr_SetString(PyExc_TypeError, "The input data and output array must have the same length.");
+        Py_DECREF(data_array);
+        Py_DECREF(out_array);
+        return NULL;
+    }
+
+    acor_fn(&mean, out_data, data, N1);
+
+    /* clean up */
+    Py_DECREF(data_array);
+    Py_DECREF(out_array);
+
+    Py_INCREF(Py_None);
+    return Py_None;
+}

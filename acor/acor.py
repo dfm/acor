@@ -33,7 +33,7 @@ def acor(data, maxlag=10):
     return _acor.acor(np.array(data), maxlag)
 
 
-def function(data):
+def function(data, py=False):
     """
     Calculate the autocorrelation function for a 1D time series.
 
@@ -48,11 +48,14 @@ def function(data):
         An autocorrelation function.
 
     """
-    N = len(data)
-    mu = np.mean(data)
     result = np.zeros_like(data)
-
-    for t in xrange(N):
-        result[t] = np.mean((data[:N - t] - mu) * (data[t:] - mu))
-
+    _acor.function(np.array(data), result)
     return result / result[0]
+
+if __name__ == "__main__":
+    import time
+    x = np.random.randn(100000)
+
+    s = time.time()
+    function(x)
+    print time.time() - s

@@ -6,4 +6,4 @@
  */
 
 int acor(double *mean, double *sigma, double *tau, double X[], int L, int maxlag);
-
+int acor_fn(double *mean, double *fn, double X[], int L);

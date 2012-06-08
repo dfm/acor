@@ -85,3 +85,31 @@ int acor(double *mean, double *sigma, double *tau, double X[], int L, int maxlag
     return 0;
 }
 
+
+int acor_fn(double *mean, double *fn, double X[], int L)
+{
+    int t, n;
+
+    /* compute the mean of X */
+    *mean = 0.;
+    for (n = 0; n < L; n++)
+        *mean += X[n];
+    *mean = *mean / L;
+
+    /* Normalize */
+    for (n = 0; n <  L; n++ )
+        X[n] -= *mean;
+
+    /* Compute the auto-covariance function */
+    for (n = 0; n < L; n++)
+        fn[n] = 0.;
+
+    for (t = 0; t < L; t++)
+        for (n = 0; n < L - t; n++)
+            fn[t] += X[n] * X[n + t];
+
+    for (t = 0; t < L; t++)
+        fn[t] /= L - t;
+
+    return 0;
+}
