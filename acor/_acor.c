@@ -61,6 +61,7 @@ static PyObject *acor_acor(PyObject *self, PyObject *args)
 {
     int i, j, N, ndim, info, maxlag;
     double *data;
+    PyObject *data_array;
 
     /* Return value */
     PyObject *ret;
@@ -73,7 +74,7 @@ static PyObject *acor_acor(PyObject *self, PyObject *args)
         return NULL;
 
     /* Get the data as a numpy array object */
-    PyObject *data_array  = PyArray_FROM_OTF(data_obj, NPY_DOUBLE, NPY_IN_ARRAY);
+    data_array  = PyArray_FROM_OTF(data_obj, NPY_DOUBLE, NPY_IN_ARRAY);
     if (data_array == NULL) {
         PyErr_SetString(PyExc_TypeError, "The input data must be a numpy.ndarray.");
         Py_XDECREF(data_array);
@@ -152,6 +153,8 @@ static PyObject *acor_function(PyObject *self, PyObject *args)
     int ndim, ndim_out, N, N_out;
     double *data, *out_data;
     double mean;
+    PyObject *data_array;
+    PyObject *out_array;
 
     /* Parse the input tuple */
     PyObject *data_obj, *out_obj;
@@ -159,8 +162,8 @@ static PyObject *acor_function(PyObject *self, PyObject *args)
         return NULL;
 
     /* Get the data as a numpy array object */
-    PyObject *data_array = PyArray_FROM_OTF(data_obj, NPY_DOUBLE, NPY_IN_ARRAY);
-    PyObject *out_array = PyArray_FROM_OTF(out_obj, NPY_DOUBLE, NPY_OUT_ARRAY);
+    data_array = PyArray_FROM_OTF(data_obj, NPY_DOUBLE, NPY_IN_ARRAY);
+    out_array = PyArray_FROM_OTF(out_obj, NPY_DOUBLE, NPY_OUT_ARRAY);
     if (data_array == NULL || out_array == NULL) {
         PyErr_SetString(PyExc_TypeError,
                 "The input data must be a numpy.ndarrays.");
