@@ -7,6 +7,10 @@
 
 #include "acor.h"
 
+struct module_state {
+    PyObject *error;
+};
+
 /* Docstrings */
 static char doc[] = "A module to estimate the autocorrelation time of time-series "\
                     "data extremely quickly.\n";
@@ -35,27 +39,6 @@ static char acor_doc[] =
 
 static char function_doc[] =
 "Calculate the autocorrelation function of a time series\n\n";
-
-
-PyMODINIT_FUNC init_acor(void);
-
-static PyObject *acor_acor(PyObject *self, PyObject *args);
-static PyObject *acor_function(PyObject *self, PyObject *args);
-
-static PyMethodDef module_methods[] = {
-    {"acor", acor_acor, METH_VARARGS, acor_doc},
-    {"function", acor_function, METH_VARARGS, function_doc},
-    {NULL, NULL, 0, NULL}
-};
-
-PyMODINIT_FUNC init_acor(void)
-{
-    PyObject *m = Py_InitModule3("_acor", module_methods, doc);
-    if (m == NULL)
-        return;
-
-    import_array();
-}
 
 static PyObject *acor_acor(PyObject *self, PyObject *args)
 {
@@ -207,4 +190,61 @@ static PyObject *acor_function(PyObject *self, PyObject *args)
 
     Py_INCREF(Py_None);
     return Py_None;
+}
+
+static PyMethodDef acor_methods[] = {
+    {"acor", acor_acor, METH_VARARGS, acor_doc},
+    {"function", acor_function, METH_VARARGS, function_doc},
+    {NULL, NULL, 0, NULL}
+};
+
+#if PY_MAJOR_VERSION >= 3
+
+#define GETSTATE(m) ((struct module_state*)PyModule_GetState(m))
+
+static int acor_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(GETSTATE(m)->error);
+    return 0;
+}
+
+static int acor_clear(PyObject *m) {
+    Py_CLEAR(GETSTATE(m)->error);
+    return 0;
+}
+
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "_acor",
+    doc,
+    sizeof(struct module_state),
+    acor_methods,
+    NULL,
+    acor_traverse,
+    acor_clear,
+    NULL
+};
+
+#define INITERROR return NULL
+
+PyObject *PyInit__acor(void)
+#else
+
+#define INITERROR return
+
+void init_acor(void)
+#endif
+{
+#if PY_MAJOR_VERSION >= 3
+    PyObject *module = PyModule_Create(&moduledef);
+#else
+    PyObject *module = Py_InitModule3("_acor", acor_methods, doc);
+#endif
+
+    if (module == NULL)
+        INITERROR;
+    import_array();
+
+#if PY_MAJOR_VERSION >= 3
+    return module;
+#endif
 }
