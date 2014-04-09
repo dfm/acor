@@ -57,11 +57,3 @@ def function(data, maxt=None):
     result = np.zeros(maxt, dtype=float)
     _acor.function(np.array(data, dtype=float), result)
     return result / result[0]
-
-if __name__ == "__main__":
-    import time
-    x = np.random.randn(499500)
-
-    s = time.time()
-    print function(x, 20000).shape
-    print time.time() - s
