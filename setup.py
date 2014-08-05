@@ -32,7 +32,7 @@ acor = Extension("acor._acor", ["acor/_acor.c", "acor/acor.c"],
 
 setup(
     name="acor",
-    version="1.1.0",
+    version="1.1.1",
     author="Daniel Foreman-Mackey and Jonathan Goodman",
     author_email="danfm@nyu.edu",
     packages=["acor"],
