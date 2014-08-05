@@ -2,7 +2,7 @@ __all__ = ["acor", "function"]
 
 import numpy as np
 
-import _acor
+from . import _acor
 
 
 def acor(data, maxlag=10):

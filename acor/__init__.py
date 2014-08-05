@@ -6,5 +6,5 @@ Python wrapper written by Dan Foreman-Mackey (NYU)
 
 """
 
-from acor import *
+from .acor import *
 
