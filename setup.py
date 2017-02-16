@@ -11,7 +11,6 @@ except ImportError:
     from distutils.core import setup, Extension
     setup, Extension
 
-import numpy
 
 
 if sys.argv[-1] == "publish":
@@ -22,13 +21,25 @@ if sys.argv[-1] == "publish":
 desc = open("README.rst").read()
 required = ["numpy"]
 
-include_dirs = [
-    "acor",
-    numpy.get_include(),
-]
-acor = Extension("acor._acor", ["acor/_acor.c", "acor/acor.c"],
-                 include_dirs=include_dirs)
 
+def get_extensions():
+    # Numpy should not be imported with some of the setup.py commands,
+    # especially egg_info. See
+    # https://github.com/pypa/pip/issues/25
+    # for more information.
+    if len(sys.argv) >= 2 and ('--help' in sys.argv[1:]
+                               or sys.argv[1] in ('--help-commands', 'egg_info',
+                                                  '--version', '--clean')):
+        return []
+    else:
+        import numpy
+        include_dirs = [
+            "acor",
+            numpy.get_include(),
+        ]
+        acor = Extension("acor._acor", ["acor/_acor.c", "acor/acor.c"],
+                         include_dirs=include_dirs)
+        return [acor]
 
 setup(
     name="acor",
@@ -41,7 +52,7 @@ setup(
     description="Estimate the autocorrelation time of a time series quickly.",
     long_description=desc,
     install_requires=required,
-    ext_modules=[acor],
+    ext_modules=get_extensions(),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
