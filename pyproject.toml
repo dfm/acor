@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools","numpy","wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "acor"
+version = "1.1.1"
+authors = [{name="Daniel Foreman-Mackey", email="danfm@nyu.edu"}, {name="Jonathan Goodman"}]
+description="Estimate the autocorrelation time of a time series quickly."
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python"
+    ]
+dependencies = ["numpy"]
+
+[project.urls]
+Homepage = "http://github.com/dfm/acor"
+
+[tool.setuptools]
+packages = ["acor"]
+license-files = ['LICEN[CS]E*']
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst"]}

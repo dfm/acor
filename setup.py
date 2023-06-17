@@ -19,9 +19,6 @@ if sys.argv[-1] == "publish":
     sys.exit()
 
 
-desc = open("README.rst").read()
-required = ["numpy"]
-
 include_dirs = [
     "acor",
     numpy.get_include(),
@@ -31,22 +28,5 @@ acor = Extension("acor._acor", ["acor/_acor.c", "acor/acor.c"],
 
 
 setup(
-    name="acor",
-    version="1.1.1",
-    author="Daniel Foreman-Mackey and Jonathan Goodman",
-    author_email="danfm@nyu.edu",
-    packages=["acor"],
-    url="http://github.com/dfm/acor",
-    license="MIT",
-    description="Estimate the autocorrelation time of a time series quickly.",
-    long_description=desc,
-    install_requires=required,
     ext_modules=[acor],
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-    ],
 )
