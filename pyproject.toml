@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "acor"
-version = "1.1.1"
+version = "1.1.2"
 authors = [{name="Daniel Foreman-Mackey", email="danfm@nyu.edu"}, {name="Jonathan Goodman"}]
 description="Estimate the autocorrelation time of a time series quickly."
 classifiers=[
