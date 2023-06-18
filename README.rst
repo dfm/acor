@@ -1,5 +1,6 @@
 ACOR
 ====
+This is an updated, maintained fork of the `original acor <https://pypi.org/project/acor/>`_ package. Below is the original README with the appropriate changes to the name and source locations.
 
 This is a direct port of a C++ routine by
 `Jonathan Goodman <http://www.math.nyu.edu/faculty/goodman/index.html>`_ (NYU)
@@ -15,7 +16,7 @@ Installation
 
 Just run ::
 
-    pip install acor
+    pip install encor
 
 with ``sudo`` if you really need it.
 
@@ -23,12 +24,12 @@ Otherwise, download the source code
 `as a tarball <https://github.com/dfm/acor/tarball/master>`_
 or clone the git repository from `GitHub <https://github.com/dfm/acor>`_: ::
 
-    git clone https://github.com/dfm/acor.git
+    git clone https://github.com/davecwright3/acor.git
 
 Then run ::
 
     cd acor
-    python setup.py install
+    python -m pip install .
 
 to compile and install the module ``acor`` in your Python path. The only
 dependency is `NumPy <http://numpy.scipy.org/>`_ (including the

@@ -3,9 +3,10 @@ requires = ["setuptools","numpy","wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "acor"
-version = "1.1.2"
-authors = [{name="Daniel Foreman-Mackey", email="danfm@nyu.edu"}, {name="Jonathan Goodman"}]
+name = "encor"
+version = "1.1.4"
+authors = [{name="Daniel Foreman-Mackey and Jonathan Goodman", email="danfm@nyu.edu"},]
+maintainers = [{name="David Wright", email="david.wright@nanograv.org"}]
 description="Estimate the autocorrelation time of a time series quickly."
 classifiers=[
     "Development Status :: 3 - Alpha",
@@ -15,9 +16,9 @@ classifiers=[
     "Programming Language :: Python"
     ]
 dependencies = ["numpy"]
-
+dynamic = ["readme"]
 [project.urls]
-Homepage = "http://github.com/dfm/acor"
+Homepage = "http://github.com/davecwright3/acor"
 
 [tool.setuptools]
 packages = ["acor"]
